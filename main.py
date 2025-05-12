@@ -8,20 +8,27 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+    
+    update_group = pygame.sprite.Group()
+    draw_group = pygame.sprite.Group()
+    Player.containers = (update_group, draw_group)
+        
     new_player = Player(SCREEN_WIDTH /2, SCREEN_HEIGHT /2)
     fps = 60
     dt = 0
-
-
+        
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
 
-        new_player.update(dt)
+        # refresh player based on movement 
+        update_group.update(dt)
 
+        # draw screen and draw player on screen
         screen.fill("black")
-        new_player.draw(screen)
+        for item in draw_group:
+            item.draw(screen)
         pygame.display.flip()
 
         dt = clock.tick(fps) / 1000
